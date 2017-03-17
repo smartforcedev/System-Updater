@@ -1,0 +1,114 @@
+all:
+  human_name: 'All'
+  status_message: '✱  Updating everything!'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'sudo softwareupdate --list --verbose'
+    - 'sudo softwareupdate --install --verbose'
+    - 'mas upgrade'
+    - 'brew update --all'
+    - 'brew upgrade'
+    - 'brew cleanup'
+    - 'brew file -u'
+    - 'npm install npm -g'
+    - 'npm update -g'
+    - 'composer global update'
+    - 'pip install -U pip'
+    - 'gem update --system'
+    - 'gem update'
+
+all but system:
+  human_name: 'All but OS X Updates'
+  status_message: '✱  Updating all but OS X Updates'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'mas upgrade'
+    - 'brew update --all'
+    - 'brew upgrade'
+    - 'brew cleanup'
+    - 'brew file -u'
+    - 'npm install npm -g'
+    - 'npm update -g'
+    - 'composer global update'
+    - 'pip install -U pip'
+    - 'gem update --system'
+    - 'gem update'
+
+os x updates:
+  human_name: 'OS X Updates'
+  status_message: '✱  Updating OS X Updates'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'sudo softwareupdate --list --verbose'
+    - 'sudo softwareupdate --install --verbose'
+
+mas:
+  human_name: 'OS X App Store'
+  status_message: '✱  Updating OS X App Store'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'mas upgrade'
+
+homebrew:
+  human_name: 'Homebrew'
+  status_message: '✱  Updating Homebrew'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'brew update --all'
+    - 'brew upgrade'
+    - 'brew cleanup'
+
+homebrew file update:
+  human_name: 'Homebrew File Update'
+  status_message: '✱  Updating Homebrew File'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'brew file -u'
+
+node / npm:
+  human_name: 'Node / NPM'
+  status_message: '✱  Updating Node / NPM'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'npm install npm -g'
+    - 'npm update -g'
+
+composer:
+  human_name: 'Composer'
+  status_message: '✱  Updating Composer'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'composer global update'
+
+python packages:
+  human_name: 'Python Packages'
+  status_message: '✱  Updating Python Packages'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'pip install -U pip'
+
+ruby gems:
+  human_name: 'Ruby Gems'
+  status_message: '✱  Updating Ruby Gems'
+  show_commands: true
+  run_commands: true
+  commands:
+    - 'gem update --system'
+    - 'gem update'
+
+quit:
+  human_name: 'Quit'
+  status_message: '✱  Bye!'
+  show_commands: false
+  run_commands: false
+  commands:
+    - 'echo /dev/null'
