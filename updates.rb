@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+﻿#!/usr/bin/env ruby
 #
 
 require 'rubygems'
@@ -9,65 +9,90 @@ require 'tty-prompt'
 # Colors (https://github.com/piotrmurach/pastel#3-supported-colors)
 require 'pastel'
 
-$maxChars = 80
-$taskPrefix = '➽  '
-$lineCharTitle = '-'
-$lineCharCmds = '.'
+ # Public: Various methods useful for performing mathematical operations.
+# All methods are module methods and should be called on the Math module.
+#
+# Examples
+#
+#   Math.square_root(9)
+#   # => 3
+# variables and methods start lowercase
+class SystemUpdates
+  # constants
+  TASKPREFIX = '➽  '.freeze
+  LINECHARTITLE = '-'.freeze
+  LINECHARCMDS = '.'.freeze
 
-# Run commands
-def runCommand(command)
+  # mutable data
+  attr_accessor :max_chars
+
+
+  # constructor and initialization of mutable data
+  # (if it has default values, that is)
+  def initialize
+    self.max_chars = 80
+  end
+
+  # Run commands
+  def run_command(command)
     pid2 = spawn(command)
     Process.wait pid2
-end
+  end
 
-# Build the selection list
-def update(yamlConf, result)
-    line   = $pastel.white($lineCharTitle * $maxChars)
-    updateSelection = yamlConf[result]
-    showCommands = updateSelection['show_commands']
-    runCommands = updateSelection['run_commands']
-    puts line, $pastel.yellow.bold(updateSelection['status_message']), line
-    updateSelection['commands'].each do |item|
-        if showCommands
-            puts taskTitle(item)
-            puts
-        end
-        runCommand(item) if runCommands
+  # Build the selection list
+  def update(yaml_conf, result)
+    line = $pastel.white(LINECHARTITLE * max_chars)
+    update_selection = yaml_conf[result]
+    showCommands = update_selection['show_commands']
+    runCommands = update_selection['run_commands']
+    puts line, $pastel.yellow.bold(update_selection['status_message']), line
+    update_selection['commands'].each do |item|
+      if showCommands
+        puts taskTitle(item)
+        puts
+      end
+      run_command(item) if runCommands
     end
-end
+  end
 
-# Style the command title and return it
-def taskTitle(item)
-    numChars = $maxChars - item.size - $taskPrefix.size - 2
-    computedLine = ($lineCharCmds * numChars)
-    $pastel.yellow($taskPrefix) + $pastel.bold(item) + "  " + $pastel.yellow.dim(computedLine)
-end
+  # Style the command title and return it
+  def taskTitle(item)
+    numChars = max_chars - item.size - TASKPREFIX.size - 2
+    computedLine = (LINECHARCMDS * numChars)
+    $pastel.yellow(TASKPREFIX) + $pastel.bold(item) + "  " + $pastel.yellow.dim(computedLine)
+  end
 
-# Main program
-begin
-    # Init Pastel
-    $pastel = Pastel.new
+  # Main program
+  def run
+    begin
+      # Init Pastel
+      $pastel = Pastel.new
 
-    # Init TTY-Prompt
-    prompt = TTY::Prompt.new(interrupt: :signal)
+      # Init TTY-Prompt
+      prompt = TTY::Prompt.new(interrupt: :signal)
 
-    # Get YAML Config
-    yamlConf = YAML.load_file(File.join(File.dirname(__FILE__), 'updates.yml'))
-    yamlConfCount = yamlConf.size
+      # Get YAML Config
+      yaml_conf = YAML.load_file(File.join(File.dirname(__FILE__), 'updates.yml'))
+      yaml_confCount = yaml_conf.size
 
-    # Create TTY-Prompt
-    result = prompt.select('Select an update task: ', help: '', active_color: :yellow, per_page: yamlConfCount) do |menu|
-        yamlConf.each do |key, value|
-            menu.choice value['human_name'], key
+      # Create TTY-Prompt
+      result = prompt.select('Select an update task: ', help: '', active_color: :yellow, per_page: yaml_confCount) do |menu|
+        yaml_conf.each do |key, value|
+        menu.choice value['human_name'], key
         end
+      end
+
+      # Run the joint
+      update(yaml_conf, result)
     end
 
-    # Run the joint
-    update(yamlConf, result)
-
-# Intercept key interruption
-rescue Interrupt
+  # Intercept key interruption
+  rescue Interrupt
     puts
     puts
     puts $pastel.bold('Exiting...')
+  end
 end
+
+# finally, run the damn thing!
+SystemUpdates.new.run
