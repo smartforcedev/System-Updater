@@ -73,17 +73,22 @@ class SystemUpdates
 
       # Get YAML Config
       yaml_conf = YAML.load_file(File.join(File.dirname(__FILE__), 'system_updates.yml'))
-      yaml_confCount = yaml_conf.size
+      yaml_confCount = yaml_conf['tools'].size
+
+      # Show Script Path
+      if yaml_conf['settings']['show_script_path']
+        puts $pastel.bold('Script Path: ') + $pastel.blue(File.dirname(__FILE__)) + "\n\n"
+      end
 
       # Create TTY-Prompt
       result = prompt.select('Select an update task: ', help: '', active_color: :yellow, per_page: yaml_confCount) do |menu|
-        yaml_conf.each do |key, value|
-        menu.choice value['human_name'], key
+        yaml_conf['tools'].each do |key, value|
+          menu.choice value['human_name'], key
         end
       end
 
       # Run the joint
-      update(yaml_conf, result)
+      update(yaml_conf['tools'], result)
     end
 
   # Intercept key interruption
