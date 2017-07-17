@@ -9,14 +9,6 @@ require 'tty-prompt'
 # Colors (https://github.com/piotrmurach/pastel#3-supported-colors)
 require 'pastel'
 
- # Public: Various methods useful for performing mathematical operations.
-# All methods are module methods and should be called on the Math module.
-#
-# Examples
-#
-#   Math.square_root(9)
-#   # => 3
-# variables and methods start lowercase
 class SystemUpdates
   # constants
   TASKPREFIX = '➽  '.freeze
@@ -71,13 +63,27 @@ class SystemUpdates
       # Init TTY-Prompt
       prompt = TTY::Prompt.new(interrupt: :signal)
 
+      # Get global Config
+      global_conf = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
+      command_file_path = File.expand_path(File.join('~/', global_conf['settings']['command_file']))
+
       # Get YAML Config
-      yaml_conf = YAML.load_file(File.join(File.dirname(__FILE__), 'system_updates.yml'))
+      yaml_conf = YAML.load_file(command_file_path)
       yaml_confCount = yaml_conf['tools'].size
 
+      # Show command file Path
+      if global_conf['settings']['show_command_file_path']
+        puts $pastel.bold('Command File Path: ') + $pastel.blue(command_file_path) + "\n"
+      end
+
       # Show Script Path
-      if yaml_conf['settings']['show_script_path']
-        puts $pastel.bold('Script Path: ') + $pastel.blue(File.dirname(__FILE__)) + "\n\n"
+      if global_conf['settings']['show_configuration_path']
+        puts $pastel.bold('Configuration Path: ') + $pastel.blue(File.join(File.dirname(__FILE__), 'config.yml')) + "\n"
+      end
+
+      # Add Spacer
+      if global_conf['settings']['show_configuration_path'] || global_conf['settings']['show_command_file_path']
+        puts "\n"
       end
 
       # Create TTY-Prompt
