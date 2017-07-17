@@ -1,5 +1,3 @@
-settings:
-  show_script_path: true
 tools:
   all:
     human_name: 'All'
