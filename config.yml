@@ -2,6 +2,6 @@ settings:
   # Path relative to your home
   command_file:            'system_updates/system_updates.yml'
   # Show the path of the command_file
-  show_command_file_path:  true
+  show_command_file_path:  false
   # Show the path of the configuration file
-  show_configuration_path: true
+  show_configuration_path: false
