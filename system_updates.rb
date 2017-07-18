@@ -10,7 +10,7 @@ require 'tty-prompt'
 require 'pastel'
 
 # Load our class
-require './system_updates.class.rb'
+require_relative './system_updates.class.rb'
 
 # finally, run the damn thing!
 SystemUpdates.new.run
