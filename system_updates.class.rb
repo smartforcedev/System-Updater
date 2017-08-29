@@ -1,9 +1,10 @@
+# The Dummy class is responsible for ...
 class SystemUpdates
   # constants
 
 
   # mutable data
-  attr_accessor :max_chars, :taskprefix, :linechartitle, :linecharcmds
+  # attr_accessor :max_chars, :taskprefix, :linechartitle, :linecharcmds
 
   # constructor and initialization of mutable data
   # (if it has default values, that is)
@@ -16,8 +17,8 @@ class SystemUpdates
 
   # Run commands
   def run_command(command)
-    pid2 = spawn(command)
-    Process.wait pid2
+    pid = spawn(command)
+    Process.wait pid
   end
 
   # check if our config is a valid file
@@ -41,25 +42,25 @@ class SystemUpdates
 
   # Build the selection list
   def update(yaml_conf, result)
-    line = $pastel.white(linechartitle * max_chars)
+    line = $pastel.white(@linechartitle * @max_chars)
     update_selection = yaml_conf[result]
-    showCommands = update_selection['show_commands']
-    runCommands = update_selection['run_commands']
+    show_commands = update_selection['show_commands']
+    run_commands = update_selection['run_commands']
     puts line, $pastel.yellow.bold(update_selection['status_message']), line
     update_selection['commands'].each do |item|
-      if showCommands
-        puts taskTitle(item)
+      if show_commands
+        puts task_title(item)
         puts
       end
-      run_command(item) if runCommands
+      run_command(item) if run_commands
     end
   end
 
   # Style the command title and return it
-  def taskTitle(item)
-    numChars = max_chars - item.size - taskprefix.size - 2
-    computedLine = (linecharcmds * numChars)
-    $pastel.yellow(taskprefix) + $pastel.bold(item) + "  " + $pastel.yellow.dim(computedLine)
+  def task_title(item)
+    num_chars = @max_chars - item.size - @taskprefix.size - 2
+    computed_line = (@linecharcmds * num_chars)
+    $pastel.yellow(@taskprefix) + $pastel.bold(item) + "  " + $pastel.yellow.dim(computed_line)
   end
 
   # Main program
@@ -80,7 +81,7 @@ class SystemUpdates
       # Get YAML Config
       if check_config_exists(command_file_path)
         yaml_conf = load_config(command_file_path)
-        yaml_confCount = yaml_conf['tools'].size
+        yaml_conf_count = yaml_conf['tools'].size
       end
 
       # Show command file Path
@@ -99,7 +100,7 @@ class SystemUpdates
       end
 
       # Create TTY-Prompt
-      result = prompt.select('Select an update task: ', help: '', active_color: :yellow, per_page: yaml_confCount) do |menu|
+      result = prompt.select('Select an update task: ', help: '', active_color: :yellow, per_page: yaml_conf_count) do |menu|
         yaml_conf['tools'].each do |key, value|
           menu.choice value['human_name'], key
         end
