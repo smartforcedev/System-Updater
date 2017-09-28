@@ -12,8 +12,7 @@ tools:
       - 'brew upgrade'
       - 'brew cleanup'
       - 'brew file -u'
-      - 'npm install npm -g'
-      - 'npm update -g'
+      - 'yarn global upgrade'
       - 'composer global update'
       - 'pip install -U pip'
       - 'gem update --system'
@@ -30,8 +29,7 @@ tools:
       - 'brew upgrade'
       - 'brew cleanup'
       - 'brew file -u'
-      - 'npm install npm -g'
-      - 'npm update -g'
+      - 'yarn global upgrade'
       - 'composer global update'
       - 'pip install -U pip'
       - 'gem update --system'
@@ -72,14 +70,13 @@ tools:
     commands:
       - 'brew file -u'
 
-  node / npm:
-    human_name:     'Node / NPM'
-    status_message: '✱  Updating Node / NPM'
+  yarn (nodejs):
+    human_name:     'Yarn (nodejs)'
+    status_message: '✱  Updating Yarn'
     show_commands:  true
     run_commands:   true
     commands:
-      - 'npm install npm -g'
-      - 'npm update -g'
+      - 'yarn global upgrade'
 
   composer:
     human_name:     'Composer'
